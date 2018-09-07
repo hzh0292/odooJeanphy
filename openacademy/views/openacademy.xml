@@ -13,7 +13,7 @@
                         </h1>
                     </div>
                     <button name="action_confirm"
-                            string="确认课表" type="object" class="oe_highlight"/>
+                            string="按了没用" type="object" class="oe_highlight"/>
                     <group colspan="2" col="2">
                         <field name="description" string="课程描述"/>
                     </group>
