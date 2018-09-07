@@ -42,3 +42,10 @@ class Session(models.Model):
                     'message': "座位的数量不能小于0"
                 },
             }
+        if self.seats < len(self.attendee_ids):
+            return {
+                'warning': {
+                    'title': '座位不够',
+                    'message': '请增加座位或者减少参与的学员人数'
+                },
+            }
