@@ -12,8 +12,8 @@
                             <field name="name"/>
                         </h1>
                     </div>
-                     <button name="action_confirm"
-                        string="确认课表" type="object" class="oe_highlight"/>
+                    <button name="action_confirm"
+                            string="确认课表" type="object" class="oe_highlight"/>
                     <group colspan="2" col="2">
                         <field name="description" string="课程描述"/>
                     </group>
@@ -59,11 +59,13 @@
                             <field name="course_id"/>
                             <field name="name"/>
                             <field name="instructor_id"/>
+                            <field name="active"/>
                         </group>
-                        <group string="计划">
+                        <group string="安排">
                             <field name="start_date"/>
                             <field name="duration"/>
                             <field name="seats"/>
+                            <field name="taken_seats" widget="progressbar"/>
                         </group>
                         <group string="出席情况"></group>
                         <label for="attendee_ids"/>
@@ -80,6 +82,7 @@
             <tree string="Session Tree">
                 <field name="name"/>
                 <field name="course_id"/>
+                <field name="taken_seats" widget="progressbar"/>
             </tree>
         </field>
     </record>
