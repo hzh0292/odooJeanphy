@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api, exceptions
 
 
 class Course(models.Model):
@@ -8,6 +8,18 @@ class Course(models.Model):
     name = fields.Char(string='课程名', required=True)
     description = fields.Text(string='课程描述')
     responsible_id = fields.Many2one('res.users', ondelete='set null', string='负责人', index=True)
+    _sql_constraints = [
+        (
+            'name_description_check',
+            'CHECK(name != description)',
+            '课程的详细描述不能就是课程的标题！'
+        ),
+        (
+            'name_unique',
+            'UNIQUE(name)',
+            '课程名必须是唯一的，不能重复！'
+        ),
+    ]
 
 
 class Session(models.Model):
@@ -49,3 +61,9 @@ class Session(models.Model):
                     'message': '请增加座位或者减少参与的学员人数'
                 },
             }
+
+    @api.constrains('instructor_id', 'attendee_ids')
+    def _check_instructor_not_in_attendees(self):
+        for r in self:
+            if r.instructor_id and r.instructor_id in r.attendee_ids:
+                raise exceptions.ValidationError('课时的教练不能同时作为学员参与')
