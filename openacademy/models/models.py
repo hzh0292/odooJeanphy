@@ -6,18 +6,34 @@ from odoo import models, fields, api, exceptions
 class Course(models.Model):
     _name = 'openacademy.course'
     name = fields.Char(string='课程名', required=True)
-    description = fields.Text(string='课程描述')
+    description = fields.Text(string='课程描述', required=True)
     responsible_id = fields.Many2one('res.users', ondelete='set null', string='负责人', index=True)
+    session_ids = fields.One2many('openacademy.session', 'course_id', string='包含课时')
+
+    @api.multi
+    def copy(self, default=None):
+        default = dict(default or {})
+
+        copied_count = self.search_count(
+            [('name', '=like', '{}重复'.format(self.name))])
+        if not copied_count:
+            new_name = '{}重复'.format(self.name)
+        else:
+            new_name = '{}重复({})'.format(self.name, copied_count)
+
+        default['name'] = new_name
+        return super(Course, self).copy(default)
+
     _sql_constraints = [
         (
             'name_description_check',
             'CHECK(name != description)',
-            '课程的详细描述不能就是课程的标题！'
+            '课程的详细描述不能仅仅就是课程的标题'
         ),
         (
             'name_unique',
             'UNIQUE(name)',
-            '课程名必须是唯一的，不能重复！'
+            '已经存在同名课程，请检查'
         ),
     ]
 
