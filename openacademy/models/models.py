@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import timedelta
 from odoo import models, fields, api, exceptions
 
 
@@ -15,11 +16,11 @@ class Course(models.Model):
         default = dict(default or {})
 
         copied_count = self.search_count(
-            [('name', '=like', '{}重复'.format(self.name))])
+            [('name', '=like', '{}复习'.format(self.name))])
         if not copied_count:
-            new_name = '{}重复'.format(self.name)
+            new_name = '{}复习'.format(self.name)
         else:
-            new_name = '{}重复({})'.format(self.name, copied_count)
+            new_name = '{}复习{}'.format(self.name, copied_count)
 
         default['name'] = new_name
         return super(Course, self).copy(default)
@@ -28,7 +29,7 @@ class Course(models.Model):
         (
             'name_description_check',
             'CHECK(name != description)',
-            '课程的详细描述不能仅仅就是课程的标题'
+            '课程的详细描述不能就是课程的标题'
         ),
         (
             'name_unique',
@@ -42,7 +43,7 @@ class Session(models.Model):
     _name = 'openacademy.session'
     name = fields.Char(required=True, string="课时名称")
     start_date = fields.Date(string="开始日期", default=fields.Date.today)
-    duration = fields.Float(digits=(6, 2), help="一天中的时段", string="时段")
+    duration = fields.Float(digits=(6, 2), help="课时持续天数", string="持续天数")
     seats = fields.Integer(string="座位数")
     active = fields.Boolean(string="有效", default=True)
 
@@ -52,6 +53,7 @@ class Session(models.Model):
     attendee_ids = fields.Many2many('res.partner', string='学员')
 
     taken_seats = fields.Float(string="上座率", compute="_taken_seats")
+    end_date = fields.Date(string='结束日期', store=True, compute='_get_end_date', inverse='_set_end_date')
 
     @api.depends('seats', 'attendee_ids')
     def _taken_seats(self):
@@ -77,6 +79,24 @@ class Session(models.Model):
                     'message': '请增加座位或者减少参与的学员人数'
                 },
             }
+
+    @api.depends('start_date', 'duration')
+    def _get_end_date(self):
+        for r in self:
+            if not (r.start_date and r.duration):
+                r.end_date = r.start_date
+                continue
+            start = fields.Datetime.from_string(r.start_date)
+            duration = timedelta(days=r.duration, seconds=-1)
+            r.end_date = start + duration
+
+    def _set_end_date(self):
+        for r in self:
+            if not (r.start_date and r.end_date):
+                continue
+            start_date = fields.Datetime.from_string(r.start_date)
+            end_date = fields.Datetime.from_string(r.end_date)
+            r.duration = (end_date - start_date).days + 1
 
     @api.constrains('instructor_id', 'attendee_ids')
     def _check_instructor_not_in_attendees(self):
