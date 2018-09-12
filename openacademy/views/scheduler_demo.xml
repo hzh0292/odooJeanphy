@@ -27,6 +27,18 @@
             </field>
         </record>
 
+        <!--<record id="ir_cron_scheduler_demo_action" model="ir.cron">-->
+        <!--<field name="name">Demo scheduler</field>-->
+        <!--<field name="model_id" ref="model_scheduler_demo"/>-->
+        <!--<field name="user_id" ref="base.user_root"/>-->
+        <!--<field name="interval_number">2</field>-->
+        <!--<field name="interval_type">minutes</field>-->
+        <!--<field name="numbercall">-1</field>-->
+        <!--<field eval="False" name="doall"/>-->
+        <!--<field name="state">code</field>-->
+        <!--<field name="code">process_demo_scheduler_queue()</field>-->
+        <!--</record>-->
+
         <record model="ir.actions.act_window" id="scheduler_demo_list_action">
             <field name="name">计划任务示例</field>
             <field name="res_model">scheduler.demo</field>
