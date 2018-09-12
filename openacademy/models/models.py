@@ -16,7 +16,7 @@ class Course(models.Model):
         default = dict(default or {})
 
         copied_count = self.search_count(
-            [('name', '=like', '{}复习'.format(self.name))])
+            [('name', '=like', '{}复习%'.format(self.name))])
         if not copied_count:
             new_name = '{}复习'.format(self.name)
         else:
@@ -46,6 +46,7 @@ class Session(models.Model):
     duration = fields.Float(digits=(6, 2), help="课时持续天数", string="持续天数")
     seats = fields.Integer(string="座位数")
     active = fields.Boolean(string="有效", default=True)
+    color = fields.Integer('颜色')
 
     instructor_id = fields.Many2one('res.partner', string='教练', domain=['|', ('instructor', '=', True),
                                                                         ('category_id.name', 'ilike', 'Teacher')])
@@ -54,6 +55,8 @@ class Session(models.Model):
 
     taken_seats = fields.Float(string="上座率", compute="_taken_seats")
     end_date = fields.Date(string='结束日期', store=True, compute='_get_end_date', inverse='_set_end_date')
+    hours = fields.Float(string="持续小时数", compute='_get_hours', inverse='_set_hours')
+    attendees_count = fields.Integer(string="参加人数", compute='_get_attendees_count', store=True)
 
     @api.depends('seats', 'attendee_ids')
     def _taken_seats(self):
@@ -97,6 +100,20 @@ class Session(models.Model):
             start_date = fields.Datetime.from_string(r.start_date)
             end_date = fields.Datetime.from_string(r.end_date)
             r.duration = (end_date - start_date).days + 1
+
+    @api.depends('duration')
+    def _get_hours(self):
+        for r in self:
+            r.hours = r.duration * 24
+
+    def _set_hours(self):
+        for r in self:
+            r.duration = r.hours / 24
+
+    @api.depends('attendee_ids')
+    def _get_attendees_count(self):
+        for r in self:
+            r.attendees_count = len(r.attendee_ids)
 
     @api.constrains('instructor_id', 'attendee_ids')
     def _check_instructor_not_in_attendees(self):

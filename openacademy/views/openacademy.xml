@@ -47,7 +47,7 @@
                 <field name="description"/>
                 <filter name="my_course" string="我的课程" domain="[('responsible_id','=',uid)]"/>
                 <group string="分组">
-                    <filter name="by_responsible" string="Responsible"
+                    <filter name="by_responsible" string="负责人"
                             context="{'group_by': 'responsible_id'}"/>
                 </group>
             </search>
@@ -112,6 +112,7 @@
         <field name="res_model">openacademy.course</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
+        <field name="context" eval="{'search_default_my_course':1}"/>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">创建您的第一个课程</p>
         </field>
@@ -127,11 +128,76 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="session_gantt_view">
+        <field name="name">session.gantt</field>
+        <field name="model">openacademy.session</field>
+        <field name="arch" type="xml">
+            <gantt string="课时甘特图" date_start="start_date" date_delay="hours" default_group_by="instructor_id"/>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="openacademy_session_graph_view">
+        <field name="name">openacademy.session.graph</field>
+        <field name="model">openacademy.session</field>
+        <field name="arch" type="xml">
+            <graph string="课程参与情况">
+                <field name="course_id"/>
+                <field name="attendees_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_openacad_session_kanban">
+        <field name="name">openacad.session.kanban</field>
+        <field name="model">openacademy.session</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="course_id">
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div
+                                t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                                  oe_kanban_global_click_edit oe_semantic_html_override
+                                                  oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                            <div class="oe_dropdown_kanban">
+                                <!-- dropdown menu -->
+                                <div class="oe_dropdown_toggle">
+                                    <i class="fa fa-bars fa-lg"/>
+                                    <ul class="oe_dropdown_menu">
+                                        <li>
+                                            <a type="delete">Delete</a>
+                                        </li>
+                                        <li>
+                                            <ul class="oe_kanban_colorpicker"
+                                                data-field="color"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="oe_clear"></div>
+                            </div>
+                            <div t-attf-class="oe_kanban_content">
+                                <!-- title -->
+                                课时:
+                                <field name="name"/>
+                                <br/>
+                                起始日期:
+                                <field name="start_date"/>
+                                <br/>
+                                时长:
+                                <field name="duration"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record model="ir.actions.act_window" id="session_list_action">
         <field name="name">课时</field>
         <field name="res_model">openacademy.session</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form,calendar</field>
+        <field name="view_mode">tree,form,calendar,gantt,graph,kanban</field>
     </record>
 
 

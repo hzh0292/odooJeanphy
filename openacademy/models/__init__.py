@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from . import models, partner
+from . import models, partner, scheduler_demo
