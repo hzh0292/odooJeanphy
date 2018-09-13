@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<odoo>
-    <data>
-        <menuitem id="menu_feitas_academy_root" name="Feitas"/>
-        <menuitem id="menu_feitas_academy_menu" name="教务管理" sequence="5" parent="menu_feitas_academy_root"/>
-        <menuitem id="menu_feitas_academy_list" name="课程" sequence="6" parent="menu_feitas_academy_menu"
-                  action="action_feitas_academy_list"/>
-    </data>
-</odoo>
