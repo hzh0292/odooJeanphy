@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_feitas_academy_feitas_academy,feitas_academy.feitas_academy,model_feitas_academy_feitas_academy,,1,0,0,0

@@ -1,0 +1,70 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+
+        <record model="ir.ui.view" id="feitas_academy_course_list">
+            <field name="name">feitas.course.form</field>
+            <field name="model">feitas.course</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit form view definition -->
+        <record model="ir.ui.view" id="view_feitas_course_form">
+            <field name="name">view_feitas_course_form</field>
+            <field name="model">feitas.course</field>
+            <field name="arch" type="xml">
+                <form string="课程">
+                    <sheet>
+                        <group colspan="4">
+                            <group colspan="3">
+                                <field name="name"/>
+                            </group>
+                            <group colspan="4">
+                                <group colspan="1">
+                                    <field name="type"/>
+                                    <field name="manager_id"/>
+                                </group>
+                                <group colspan="1">
+                                    <field name="total_hours"/>
+                                    <field name="lesson_hours"/>
+                                    <field name="exercise_hours" help="实操课时只能是3或4的倍数"/>
+                                </group>
+                            </group>
+                            <group colspan="4">
+                                <notebook>
+                                    <page string="介绍">
+                                        <field name="description" placeholder="请输入课程描述"/>
+                                    </page>
+                                </notebook>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Top menu item -->
+
+        <menuitem name="练习" id="feitas_academy_menu_root"/>
+        <!-- menu categories -->
+        <menuitem name="教务管理" id="feitas_academy.menu_edu" parent="feitas_academy_menu_root"/>
+        <!-- actions -->
+        <record model="ir.actions.act_window" id="feitas_academy.action_window">
+            <field name="name">feitas_academy_action_list</field>
+            <field name="res_model">feitas.course</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">创建您的第一个课程吧</p>
+            </field>
+        </record>
+        <menuitem name="课程" id="feitas_academy.menu_course" parent="feitas_academy.menu_edu"
+                  action="feitas_academy.action_window"/>
+
+    </data>
+</odoo>
