@@ -47,18 +47,14 @@ class feitas_course(models.Model):
 
     @api.constrains('manager_id')
     def _manage_course_check(self):
-        if len(self.manager_id.course_ids) > 3:
+        course_ids = self.search_count(['manager_id', '=', self.manager_id])
+        if len(course_ids) > 3:
             raise exceptions.ValidationError('同一个用户不能负责3门以上的课程')
         sum_total_hours = sum_lesson_hours = 0
-        for r in self.manager_id.course_ids:
+        for r in course_ids:
             sum_total_hours += r.total_hours
             sum_lesson_hours += r.lesson_hours
         if sum_total_hours > 200:
             raise exceptions.ValidationError('同一个用户负责总时长不能超过200小时')
         if sum_lesson_hours > 100:
             raise exceptions.ValidationError('同一个用户负责总理论课时时长不能超过100小时')
-
-
-class Manager(models.Model):
-    _inherit = 'res.users'
-    course_ids = fields.One2many('feitas.course', string='负责课程', readonly=True)
