@@ -45,7 +45,7 @@ class feitas_course(models.Model):
             if r.exercise_hours % 3 != 0 and r.exercise_hours % 4 != 0:
                 raise exceptions.ValidationError('实操课时只能是3或4的倍数')
 
-    @api.constrains('manager_id')
+    @api.multi
     def _manage_course_check(self):
         course_ids = self.search_count(['manager_id', '=', self.manager_id])
         if len(course_ids) > 3:
