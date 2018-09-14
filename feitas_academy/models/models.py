@@ -39,6 +39,25 @@ class feitas_course(models.Model):
                 },
             }
 
+    @api.onchange('exercise_hours', 'lesson_hours')
+    def _verify_course_type(self):
+        if self.type == 'i' and self.exercise_hours != 0:
+            self.update({'exercise_hours': 0})
+            return {
+                'warning': {
+                    'title': "当前为理论课程",
+                    'message': "理论课程无实操课时"
+                },
+            }
+        if self.type == 'e' and self.lesson_hours != 0:
+            self.update({'lesson_hours': 0})
+            return {
+                'warning': {
+                    'title': "当前为实操课程",
+                    'message': "实操课时没有理论课时"
+                },
+            }
+
     @api.constrains('exercise_hours')
     def _check_hours_3x_or_4x(self):
         for r in self:
