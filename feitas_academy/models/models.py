@@ -48,7 +48,7 @@ class feitas_course(models.Model):
     @api.multi
     @api.constrains('manager_id')
     def _manage_course_check(self):
-        course_ids = self.search_count(['manager_id', '=', self.manager_id])
+        course_ids = self.env['feitas.course'].search(['manager_id', '=', self.manager_id])
         if len(course_ids) > 3:
             raise exceptions.ValidationError('同一个用户不能负责3门以上的课程')
         sum_total_hours = sum_lesson_hours = 0
