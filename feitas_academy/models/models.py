@@ -45,17 +45,18 @@ class feitas_course(models.Model):
             if r.exercise_hours % 3 != 0 and r.exercise_hours % 4 != 0:
                 raise exceptions.ValidationError('实操课时只能是3或4的倍数')
 
-    @api.multi
-    @api.constrains('manager_id')
-    def _manage_course_check(self):
-        course_ids = self.env['feitas.course'].search(['manager_id', '=', self.manager_id])
-        if len(course_ids) > 3:
-            raise exceptions.ValidationError('同一个用户不能负责3门以上的课程')
-        sum_total_hours = sum_lesson_hours = 0
-        for r in course_ids:
-            sum_total_hours += r.total_hours
-            sum_lesson_hours += r.lesson_hours
-        if sum_total_hours > 200:
-            raise exceptions.ValidationError('同一个用户负责总时长不能超过200小时')
-        if sum_lesson_hours > 100:
-            raise exceptions.ValidationError('同一个用户负责总理论课时时长不能超过100小时')
+    # @api.multi
+    # @api.constrains('manager_id')
+    # def _manage_course_check(self):
+    #     self.ensure_one()
+    #     course_ids = self.env['feitas.course'].search(['manager_id', '=', self.manager_id)])
+    #     if len(course_ids) > 3:
+    #         raise exceptions.ValidationError('同一个用户不能负责3门以上的课程')
+    #     sum_total_hours = sum_lesson_hours = 0
+    #     for r in course_ids:
+    #         sum_total_hours += r.total_hours
+    #         sum_lesson_hours += r.lesson_hours
+    #     if sum_total_hours > 200:
+    #         raise exceptions.ValidationError('同一个用户负责总时长不能超过200小时')
+    #     if sum_lesson_hours > 100:
+    #         raise exceptions.ValidationError('同一个用户负责总理论课时时长不能超过100小时')

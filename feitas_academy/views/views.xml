@@ -13,6 +13,21 @@
             </field>
         </record>
 
+        <record id="view_search_course" model="ir.ui.view">
+            <field name="name">名称</field>
+            <field name="model">feitas.course</field>
+            <field name="arch" type="xml">
+                <search string="名称">
+                    <field name="name"/>
+                    <field name="manager_id"/>
+                    <group string="分组">
+                        <filter name="by_manager" string="负责人" context="{'group_by': 'manager_id'}"/>
+                        <filter name="by_type" string="类型" context="{'group_by': 'type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
         <!-- explicit form view definition -->
         <record model="ir.ui.view" id="view_feitas_course_form">
             <field name="name">view_feitas_course_form</field>
