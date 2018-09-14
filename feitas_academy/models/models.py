@@ -59,6 +59,6 @@ class feitas_course(models.Model):
             raise exceptions.ValidationError('同一个用户负责总理论课时时长不能超过100小时')
 
 
-class Partner(models.Model):
-    _inherit = 'res.partner'
-    course_ids = fields.Many2many('feitas.course', string='负责课程', readonly=True)
+class Manager(models.Model):
+    _inherit = 'res.users'
+    course_ids = fields.One2many('feitas.course', string='负责课程', readonly=True)
