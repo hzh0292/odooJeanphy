@@ -45,20 +45,20 @@ class feitas_course(models.Model):
             if r.exercise_hours % 3 != 0 and r.exercise_hours % 4 != 0:
                 raise exceptions.ValidationError('实操课时只能是3或4的倍数')
 
-
-class Partner(models.Model):
-    _inherit = 'res.partner'
-    course_ids = fields.Many2many('feitas.course', string='负责课程', readonly=True)
-
-    @api.constrains('course_ids')
+    @api.constrains('manager_id')
     def _manage_course_check(self):
-        if len(self.course_ids) > 3:
+        if len(self.manager_id.course_ids) > 3:
             raise exceptions.ValidationError('同一个用户不能负责3门以上的课程')
         sum_total_hours = sum_lesson_hours = 0
-        for r in self.course_ids:
+        for r in self.manager_id.course_ids:
             sum_total_hours += r.total_hours
             sum_lesson_hours += r.lesson_hours
         if sum_total_hours > 200:
             raise exceptions.ValidationError('同一个用户负责总时长不能超过200小时')
         if sum_lesson_hours > 100:
             raise exceptions.ValidationError('同一个用户负责总理论课时时长不能超过100小时')
+
+
+class Partner(models.Model):
+    _inherit = 'res.partner'
+    course_ids = fields.Many2many('feitas.course', string='负责课程', readonly=True)
