@@ -11,8 +11,7 @@ class SaleOrder(models.Model):
     @api.depends('product_id')
     def _compute_buffer_store(self):
         for r in self:
-            r.x_value = r.product_id.qty_available
-
+            r.x_value = r.product_id.virtual_available
     # @api.onchange('product_id')
     # def _qty_avaiable_store(self):
     #     for r in self:
