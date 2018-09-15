@@ -16,4 +16,4 @@ class SaleOrder(models.Model):
     # def _qty_avaiable_store(self):
     #     for r in self:
     #         if r.product_id:
-    #             r.x_value = r.product_id.qty_available
+    #             r.x_value = r.product_id.virtual_available
