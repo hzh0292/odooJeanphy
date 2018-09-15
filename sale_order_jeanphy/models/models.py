@@ -5,8 +5,8 @@ from odoo import models, fields, api
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order.line'
-    # x_value = fields.Float(string='在手量')
-    x_value = fields.Float(string='在手量', compute='_compute_buffer_store', store=True)
+    # x_value = fields.Float(string='可用数量')
+    x_value = fields.Float(string='可用数量', compute='_compute_buffer_store', store=True)
 
     @api.depends('product_id')
     def _compute_buffer_store(self):
