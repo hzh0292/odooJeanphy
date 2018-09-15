@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//page[1]/field[1]/tree[1]/field[@name='product_uom_qty']" position="after">
-                    <field name="x_value" string="在手量"/>
+                    <field name="x_value" string="可用数量"/>
                 </xpath>
             </field>
         </record>
