@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="feitas_academy.report_course_view">
+            <t t-call="web.html_container">s
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+
+                        <!-- <t t-call="report.external_layout"> -->
+                        <div class="page">
+                            <h2 align="center">课程结业证书</h2>
+                            <h2 t-field="doc.name"/>
+                            <p>
+                                理论课时：
+                                <span t-field="doc.lesson_hours"/>
+                                实操课时：
+                                <span t-field="doc.exercise_hours"/>
+                            </p>
+                            <p>
+                                <span t-field="doc.type"/>
+                            </p>
+                            <p>
+                                <t t-raw="doc.type"/>
+                            </p>
+                            <p>
+                                <t t-raw="doc.lesson_hours"/>
+                            </p>
+                            <p>
+                                <span t-field="doc.description"/>
+                            </p>
+                            <!--
+                            Build your report here!
+                            Do it in awesome way ;)
+                            -->
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

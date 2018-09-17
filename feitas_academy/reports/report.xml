@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <!-- NAME & FILE_NAME should be the same -->
+        <report
+                id="report_course"
+                model="feitas.course"
+                report_type="qweb-pdf"
+                string="课程"
+                name="feitas_academy.report_course_view"
+                file="feitas_academy.report_course_view"
+        />
+
+    </data>
+</odoo>
