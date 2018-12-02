@@ -7,7 +7,7 @@ def main():
     print('当前工作路径为：%s。' % rootpath)
     print('当前工作路径下的文件夹有：')
     for dir in os.listdir():
-        if os.path.isdir(dir):
+        if os.path.isdir(dir) and dir[:1] != '.':
             print(dir, end=' ')
     print()
     while True:
