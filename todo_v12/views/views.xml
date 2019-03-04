@@ -1,0 +1,107 @@
+<odoo>
+    <data>
+
+        <record id="todo_task_view_filter" model="ir.ui.view">
+            <field name="name">todo.task.view_filter</field>
+            <field name="model">todo.task</field>
+            <field name="arch" type="xml">
+                <search string="待办事项">
+                    <field name="name"/>
+                    <field name="category_id"/>
+                    <separator/>
+                    <filter string="未完成" name="undone" domain="[('is_done','=',False)]"/>
+                    <filter string="已完成" name="done" domain="[('is_done','=',True)]"/>
+                    <separator/>
+                    <filter string="待办" name="todo" domain="[('priority','=','todo')]"/>
+                    <filter string="普通" name="normal" domain="[('priority','=','normal')]"/>
+                    <filter string="紧急" name="urgency" domain="[('priority','=','urgency')]"/>
+                    <group expand="0" string="分组">
+                        <filter string="分类" name="group_category" domain="[]" context="{'group_by':'category_id'}"/>
+                        <filter string="紧急程度" name="group_priority" domain="[]" context="{'group_by':'priority'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="todo_task_view_tree" model="ir.ui.view">
+            <field name="name">todo.task.view_tree</field>
+            <field name="model">todo.task</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="待办事项" decoration-danger="is_expired">
+                    <field name="name"/>
+                    <field name="category_id"/>
+                    <field name="deadline"/>
+                    <field name="is_done"/>
+                    <field name="is_expired" invisible="True"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="todo_task_view_form" model="ir.ui.view">
+            <field name="name">todo.task.view_form</field>
+            <field name="model">todo.task</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="待办事项">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="category_id"/>
+                                <field name="is_done"/>
+                                <field name="pinyin"/>
+                            </group>
+                            <group>
+                                <field name="priority"/>
+                                <field name="deadline"/>
+                                <field name="is_expired" readonly="True"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="todo_category_view_tree" model="ir.ui.view">
+            <field name="name">todo.category.view_tree</field>
+            <field name="model">todo.category</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="分类" editable="bottom">
+                    <field name="name"/>
+                    <field name="count"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="todo_category_view_form" model="ir.ui.view">
+            <field name="name">todo.category.view_form</field>
+            <field name="model">todo.category</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="分类">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="count" readonly="True"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_mark_todo_task_done" model="ir.actions.server">
+            <field name="name">标记完成</field>
+            <field name="model_id" ref="model_todo_task"/>
+            <field name="binding_model_id" ref="model_todo_task"/>
+            <field name="state">code</field>
+            <field name="code">records.write({'is_done':True})</field>
+        </record>
+
+    </data>
+</odoo>
